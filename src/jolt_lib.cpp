@@ -22,6 +22,8 @@
 #include <cstdarg>
 #include <thread>
 
+#include <pybind11/pybind11.h>
+
 // Disable common warnings triggered by Jolt, you can use JPH_SUPPRESS_WARNING_PUSH / JPH_SUPPRESS_WARNING_POP to store and restore the warning state
 JPH_SUPPRESS_WARNINGS
 
@@ -213,6 +215,7 @@ void init() {
 
   physicsSystem.SetBodyActivationListener(&bodyActivationListener);
   physicsSystem.SetContactListener(&contactListener);
+  printf("simple physics setup done\n");
 }
 
 void shutdown() {

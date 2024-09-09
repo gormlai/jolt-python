@@ -19,6 +19,10 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(SRC_DIR "src")
 set(INCLUDE_DIR "include")
 set(TEINCLUDE_DIR "${INCLUDE_DIR}/TinyEngine")
+set(PYBIND_INCLUDE_DIR "extern/pybind11/include")
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(PYTHON3 REQUIRED python3)
 
 file(GLOB PRIVATE_SOURCES
   ${SRC_DIR}/*.cpp
@@ -33,7 +37,10 @@ set(SOURCES ${PRIVATE_SOURCES})
 set(PRIVATE_INCLUDE_DIRS
   ${SRC_DIR}
   ${INCLUDE_DIR}
+  ${PYTHON3_INCLUDE_DIRS}
+  ${PYBIND_INCLUDE_DIR}
 )
+
 
 
 if(MSVC)
@@ -116,7 +123,7 @@ set(PUBLIC_LIBS
 endif()
 
 
-set(LIBS ${PLATFORM_LIBS} ${PUBLIC_LIBS} ${PRIVATE_LIBS})
+set(LIBS ${PLATFORM_LIBS} ${PUBLIC_LIBS} ${PRIVATE_LIBS} ${PYTHON3_LIBRARIES})
 
 set(PROJECT_NAME "jolt-python")
 project(${PROJECT_NAME})
