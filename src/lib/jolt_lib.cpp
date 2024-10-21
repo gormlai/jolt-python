@@ -18,6 +18,8 @@
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
 
+#include "HandleManager.h"
+
 #include <iostream>
 #include <cstdarg>
 #include <thread>
@@ -190,9 +192,12 @@ namespace {
   JPH::JobSystemThreadPool * jobSystem = nullptr;
   MyBodyActivationListener bodyActivationListener;
   MyContactListener contactListener;
+  HandleManager<void*, uint64_t> g_handleManager;
+  HandleManager<JPH::ShapeRefC, uint64_t> g_shapeHandleManager;
 
   int cCollisionSteps = 1;
   float cDeltaTime = 1.0f / 60.0f;
+
 }
 
 extern "C" {
@@ -200,6 +205,28 @@ extern "C" {
   void shutdown();
   void start();
   void update();
+  uint64_t createBoxShape(float sizeX, float sizeY, float sizeZ);
+  uint64_t createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer);
+}
+
+uint64_t createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer) {
+  uint64_t rigidBodyHandle = 0;
+  JPH::ShapeRefC shapeRef = g_shapeHandleManager.lookup(shapeSettingsHandle);
+  JPH::BodyCreationSettings creationSettings(shapeRef.GetPtr(), position, rotation, motionType, layer);
+  JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
+  JPH::Body * newBody = bodyInterface.CreateBody(creationSettings);
+  //rigidBodyHandle = g_handleManager.create(newBody);
+  return rigidBodyHandle;
+}
+
+uint64_t createBoxShape(float sizeX, float sizeY, float sizeZ) {
+  JPH::BoxShapeSettings shapeSettings(JPH::Vec3(sizeX, sizeY, sizeZ));
+  shapeSettings.SetEmbedded();
+
+  JPH::ShapeSettings::ShapeResult creationResult = shapeSettings.Create();
+  JPH::ShapeRefC shapeRef = creationResult.Get();
+  uint64_t shapeRefHandle = g_shapeHandleManager.create(shapeRef);
+  return shapeRefHandle;
 }
 
 void init() {
@@ -239,109 +266,3 @@ void update() {
   
 }
 
-int main(const int argc, const char **argv) {
-
-  using namespace JPH::literals;
-
-
-
-  JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
-
-  // create the settings for the floor. This is mostly like a descriptor in other apis
-  JPH::BoxShapeSettings floorShapeSettings(JPH::Vec3(100.0f, 1.0f, 100.0f));
-  floorShapeSettings.SetEmbedded();
-  // then create the floor 
-  JPH::ShapeSettings::ShapeResult floorShapeResult = floorShapeSettings.Create();
-  JPH::ShapeRefC floorShape = floorShapeResult.Get(); // We don't expect an error here, but you can check floor_shape_result for HasError() / GetError()
-  // add physics properties
-  JPH::BodyCreationSettings floorSettings(floorShape, JPH::RVec3(0.0_r, -1.0_r, 0.0_r), JPH::Quat::sIdentity(), JPH::EMotionType::Static, Layers::NON_MOVING);
-  // instantiate floor and add body to the world
-  JPH::Body *floor = bodyInterface.CreateBody(floorSettings);
-  bodyInterface.AddBody(floor->GetID(), JPH::EActivation::DontActivate);
-
-  // add a dynamic body
-  JPH::BodyCreationSettings sphereSettings(new JPH::SphereShape(0.5f), JPH::RVec3(0.0_r, 2.0_r, 0.0_r), JPH::Quat::sIdentity(), JPH::EMotionType::Dynamic, Layers::MOVING);
-  JPH::BodyID sphereId = bodyInterface.CreateAndAddBody(sphereSettings, JPH::EActivation::Activate);
-  // Jolt uses handles (id mainly). Set velocity of sphere
-  bodyInterface.SetLinearVelocity(sphereId, JPH::Vec3(0.0f, -5.0f, 0.0f));
-
-
-/*
-  Tiny::window(appName.c_str(), windowWidth, WindowHeight);
-
-  Tiny::event.handler = []() {
-      if(!Tiny::event.press.empty()) {
-          const SDL_Keycode & keycode = Tiny::event.press.back();
-          switch(keycode) {
-              case SDLK_ESCAPE:
-                  Tiny::quit();
-                  break;
-          }
-      }
-  };
-*/
-
-/*
-  uint step = 0;
-
-  Square3D renderFloor;
-  renderFloor.model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1,0,0));
-  renderFloor.model = glm::scale(renderFloor.model, glm::vec3(1000));
-
-	cam::look = glm::vec3(0, 100, 0);
-	cam::far = 2000.0f;
-	cam::roty = 25.0f;
-	cam::zoomrate = 10.0f;
-	cam::init(600, cam::PROJ);
-
-	Shader defaultShader({"shader/default.vs", "shader/default.fs"}, {"in_Position", "in_Normal"});
- 
-	glm::vec3 lightpos = glm::vec3(50);
-	float lightcolor[3] = {1.00, 1.00, 1.00};
-
-  constexpr glm::vec3 floorColor(1.0f, 1.0f, 0.0f);
-  constexpr glm::vec3 clearColor(1.0f, 0.0f, 0.0f);
-  constexpr glm::vec3 ballColor(1.0f, 1.0f, 0.0f);
-  Tiny::view.pipeline = [&]() {
-    Tiny::view.target(clearColor);
-
-		defaultShader.use();
-		defaultShader.uniform("projectionCamera", cam::vp);
-		defaultShader.uniform("lightcolor", lightcolor);
-		defaultShader.uniform("lookDir", cam::look - cam::pos);
-		defaultShader.uniform("lightDir", lightpos);
-		defaultShader.uniform("drawfloor", true);
-		defaultShader.uniform("drawshadow", false);
-		defaultShader.uniform("wireframe", false);
-		defaultShader.uniform("drawcolor", glm::vec4(floorColor[0],floorColor[1],floorColor[2],1));
-		defaultShader.uniform("model", renderFloor.model);
-		renderFloor.render();
-		defaultShader.uniform("drawfloor", false);
-
-  };
-*/
-/*
-  Tiny::loop([&](){
-      // do something in here
-      ++step;
-
-      // Output current position and velocity of the sphere
-      JPH::RVec3 position = bodyInterface.GetCenterOfMassPosition(sphereId);
-      JPH::Vec3 velocity = bodyInterface.GetLinearVelocity(sphereId);
-      if(velocity.LengthSq() > FLT_EPSILON) {
-              std::cout << "Step " << step << ": Position = (" << position.GetX() << ", " << position.GetY() << ", " << position.GetZ() << "), Velocity = (" << velocity.GetX() << ", " << velocity.GetY() << ", " << velocity.GetZ() << ")" << std::endl;
-      }
-
-      // If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
-      const int cCollisionSteps = 1;
-
-      // Step the world
-      physicsSystem.Update(cDeltaTime, cCollisionSteps, &tempAllocator, &jobSystem);
-
-  });
-*/
-
-
-//  Tiny::quit();
-  return 0;
-}
