@@ -24,7 +24,7 @@
 #include <cstdarg>
 #include <thread>
 
-#include <pybind11/pybind11.h>
+#include "jolt_lib.h"
 
 // Disable common warnings triggered by Jolt, you can use JPH_SUPPRESS_WARNING_PUSH / JPH_SUPPRESS_WARNING_POP to store and restore the warning state
 JPH_SUPPRESS_WARNINGS
@@ -200,16 +200,8 @@ namespace {
 
 }
 
-extern "C" {
-  void init();
-  void shutdown();
-  void start();
-  void update();
-  uint64_t createBoxShape(float sizeX, float sizeY, float sizeZ);
-  uint64_t createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer);
-}
 
-uint64_t createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer) {
+uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer) {
   uint64_t rigidBodyHandle = 0;
   JPH::ShapeRefC shapeRef = g_shapeHandleManager.lookup(shapeSettingsHandle);
   JPH::BodyCreationSettings creationSettings(shapeRef.GetPtr(), position, rotation, motionType, layer);
@@ -219,7 +211,8 @@ uint64_t createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH:
   return rigidBodyHandle;
 }
 
-uint64_t createBoxShape(float sizeX, float sizeY, float sizeZ) {
+
+uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ) {
   JPH::BoxShapeSettings shapeSettings(JPH::Vec3(sizeX, sizeY, sizeZ));
   shapeSettings.SetEmbedded();
 
@@ -229,7 +222,7 @@ uint64_t createBoxShape(float sizeX, float sizeY, float sizeZ) {
   return shapeRefHandle;
 }
 
-void init() {
+void jolt_init() {
   JPH::RegisterDefaultAllocator();
   JPH::Trace = JPH::TraceImpl;
   JPH_IF_ENABLE_ASSERTS(JPH::AssertFailed = JPH::AssertFailedImpl;)
@@ -245,18 +238,18 @@ void init() {
   printf("simple physics setup done\n");
 }
 
-void shutdown() {
+void jolt_shutdown() {
   delete tempAllocator;
   delete jobSystem;
 }
 
-void start() {
+void jolt_start() {
   // nothing more to do -- optimise world
   physicsSystem.OptimizeBroadPhase();
 
 }
 
-void update() {
+void jolt_update() {
   // If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
   const int cCollisionSteps = 1;
   constexpr float cDeltaTime = 1.0f / 60.0f;
