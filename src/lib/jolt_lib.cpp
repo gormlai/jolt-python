@@ -201,6 +201,18 @@ namespace {
 
 }
 
+void jolt_addRigidBody(uint64_t rigidBodyHandle, bool activate) {
+  JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
+  JPH::Body * rigidBody = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle));
+  const JPH::EActivation startsActive = 
+    activate ? 
+    JPH::EActivation::Activate :
+    JPH::EActivation::DontActivate;
+
+  bodyInterface.AddBody(rigidBody->GetID(), startsActive);
+  
+}
+
 
 uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer) {
   uint64_t rigidBodyHandle = 0;
@@ -208,7 +220,8 @@ uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position,
   JPH::BodyCreationSettings creationSettings(shapeRef.GetPtr(), position, rotation, motionType, layer);
   JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
   JPH::Body * newBody = bodyInterface.CreateBody(creationSettings);
-  //rigidBodyHandle = g_handleManager.create(newBody);
+  assert(newBody);
+  rigidBodyHandle = g_handleManager.create(newBody);
   return rigidBodyHandle;
 }
 
