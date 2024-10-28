@@ -25,6 +25,7 @@
 #include <thread>
 
 #include "jolt_lib.h"
+#include <assert.h>
 
 // Disable common warnings triggered by Jolt, you can use JPH_SUPPRESS_WARNING_PUSH / JPH_SUPPRESS_WARNING_POP to store and restore the warning state
 JPH_SUPPRESS_WARNINGS
@@ -214,7 +215,6 @@ uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position,
 
 uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ) {
   JPH::BoxShapeSettings shapeSettings(JPH::Vec3(sizeX, sizeY, sizeZ));
-  shapeSettings.SetEmbedded();
 
   JPH::ShapeSettings::ShapeResult creationResult = shapeSettings.Create();
   JPH::ShapeRefC shapeRef = creationResult.Get();

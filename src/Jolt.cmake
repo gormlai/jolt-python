@@ -3,7 +3,6 @@ include(FetchContent)
 # The configurations we support
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Distribution")
 
-set(CMAKE_BUILD_TYPE "Distribution")
 
 # When turning this option on, the library will be compiled using doubles for positions. This allows for much bigger worlds.
 set(DOUBLE_PRECISION OFF)
@@ -41,8 +40,8 @@ set(USE_FMADD ON)
 # Include Jolt
 FetchContent_Declare(
         JoltPhysics
-        GIT_REPOSITORY "https://github.com/jrouwe/JoltPhysics"
-        GIT_TAG "v5.0.0"
+        GIT_REPOSITORY "https://github.com/gormlai/JoltPhysics"
+        GIT_TAG "relocatable"
 		SOURCE_SUBDIR "Build"
 )
 FetchContent_MakeAvailable(JoltPhysics)
@@ -100,11 +99,11 @@ if (MSVC)
 	endif()
 else()
 	# Set general compiler flags
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -fPIC")
 
 	# Optionally generate debug symbols
 	if (GENERATE_DEBUG_SYMBOLS)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fPIC")
 	endif()
 
 	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -128,7 +127,7 @@ else()
 
 	# Set linker flags
 	if (NOT ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows"))
-		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread -fPIC -no-pie")
 	endif()
 endif()
 

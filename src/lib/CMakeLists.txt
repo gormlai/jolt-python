@@ -1,6 +1,10 @@
-set(JPH_SHARED_LIBRARY 1)
-include (../Jolt.cmake)
 
+
+set(CMAKE_BUILD_TYPE_ORG "${CMAKE_BUILD_TYPE}")
+set(JPH_SHARED_LIBRARY 1)
+#set(CMAKE_BUILD_TYPE "Distribution")
+include (../Jolt.cmake)
+set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE_ORG}")
 
 set(PROJECT_NAME "jolt-python")
 project(${PROJECT_NAME})
@@ -45,10 +49,10 @@ set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}  -DGUID_WINDOWS /MP /EHsc /FI ${SHARED_SRC
 set(CMAKE_C_FLAGS_DEBUG          "-g -D_DEBUG -D_NO_DEBUG_HEAP=1 /Od /GS /RTC1 /Qpar /fp:fast /fp:except- /Zc:wchar_t- /WX-")
 set(CMAKE_C_FLAGS_RELEASE        "-DNDEBUG /O2 /Ob2 /Oi /Qt /GT /GL /Gy /arch:SSE2 /fp:fast /fp:except- /Zc:wchar_t- ")
 else()
-set(CMAKE_C_FLAGS                "-Wall -std=c11 -ffast-math -Wl,-rpath,./")
+set(CMAKE_C_FLAGS                "-fPIC -Wall -std=c11 -ffast-math -Wl,-rpath,./")
 set(CMAKE_C_FLAGS_DEBUG          "-g -D_DEBUG")
 set(CMAKE_C_FLAGS_RELEASE        "-O3 -DNDEBUG -s")
-set(CMAKE_CXX_FLAGS              "-Wall -Wl,-rpath,./")
+set(CMAKE_CXX_FLAGS              "-fPIC -Wall -Wl,-rpath,./")
 set(CMAKE_CXX_FLAGS_DEBUG          "-g -D_DEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE        "-O3 -DNDEBUG -s")
 
