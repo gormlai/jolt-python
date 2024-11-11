@@ -37,3 +37,6 @@ def createRigidBody(shape, pos, rotation, motionType, layer):
   cPos = (c_float * len(pos))(*pos)
   cRot = (c_float * len(rotation))(*rotation)
   return exportedFunctions.jolt_cCreateRigidBody(shape, cPos, cRot, motionType, layer)
+
+def addRigidBody(rigidBodyHandle, activate):
+  return exportedFunctions.jolt_addRigidBody(rigidBodyHandle, activate)

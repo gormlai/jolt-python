@@ -10,6 +10,7 @@ if __name__ == "__main__":
   motionType = 0
   layer = 0
   floorBody = jolt.createRigidBody(boxShape, pos, rot, motionType, layer)
+  jolt.addRigidBody(floorBody, False)
 
   jolt.start()
   jolt.update()
