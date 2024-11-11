@@ -4,7 +4,7 @@ if __name__ == "__main__":
   jolt.init()
 
   # add geometry here
-  boxShape = jolt.createBoxShape(100, 0, 100)
+  boxShape = jolt.createBoxShape(100, 1, 100)
   pos = [0.0, -1.0, 0.0]
   rot = [0.0, 0.0, 0.0, 1.0]
   motionType = 0

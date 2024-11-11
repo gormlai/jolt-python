@@ -8,32 +8,32 @@ exportedFunctions = None
 def init():
   global exportedFunctions
   currentDirectory = os.getcwd()
-  buildDirectory = currentDirectory + "/build/"
+  buildDirectory = currentDirectory
   print("current directory is " + currentDirectory)
-  soFile = buildDirectory + "libjolt-python.so"
+  soFile = buildDirectory + "/libjolt-python.so"
   exportedFunctions = CDLL(soFile)
-  exportedFunctions.init()
+  exportedFunctions.jolt_init()
 
 def start():
   global exportedFunctions
-  exportedFunctions.start()
+  exportedFunctions.jolt_start()
 
 def update():
   global exportedFunctions
-  exportedFunctions.update()
+  exportedFunctions.jolt_update()
 
 def shutdown():
   global exportedFunctions
-  exportedFunctions.shutdown()
+  exportedFunctions.jolt_shutdown()
 
 def createBoxShape(xSize, ySize, zSize):
   global exportedFunctions
   x = c_float(xSize)
   y = c_float(ySize)
   z = c_float(zSize)
-  return exportedFunctions.createBoxShape(x, y, z)
+  return exportedFunctions.jolt_createBoxShape(x, y, z)
 
 def createRigidBody(shape, pos, rotation, motionType, layer):
-  cPos = struct.pack('fff',pos[0], pos[1], pos[2])
-  cRot = struct.pack('ffff',rotation[0], rotation[1], rotation[2], rotation[3])
-  return exportedFunctions.createRigidBody(shape, cPos, cRot, motionType, layer)
+  cPos = (c_float * len(pos))(*pos)
+  cRot = (c_float * len(rotation))(*rotation)
+  return exportedFunctions.jolt_cCreateRigidBody(shape, cPos, cRot, motionType, layer)

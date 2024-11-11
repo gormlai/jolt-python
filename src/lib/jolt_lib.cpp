@@ -225,6 +225,12 @@ uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position,
   return rigidBodyHandle;
 }
 
+uint64_t jolt_cCreateRigidBody(uint64_t shapeSettingsHandle, float position[], float rotation[], JPH::EMotionType motionType, JPH::ObjectLayer layer) {
+   JPH::RVec3 pos{position[0], position[1], position[2]};
+   JPH::Quat rot{rotation[0], rotation[1], rotation[2], rotation[3]};
+   return jolt_createRigidBody(shapeSettingsHandle, pos, rot, motionType, layer);
+}
+
 
 uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ) {
   JPH::BoxShapeSettings shapeSettings(JPH::Vec3(sizeX, sizeY, sizeZ));
