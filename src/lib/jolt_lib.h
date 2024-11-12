@@ -28,6 +28,7 @@ extern "C" {
   void jolt_addRigidBody(uint64_t rigidBodyHandle, bool activate);
   void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity);
   void jolt_cSetLinearVelocity(uint64_t rigidBodyHandle, float velocity[]);
+  bool jolt_isActive(uint64_t rigidBodyHandle);
 
 }
 

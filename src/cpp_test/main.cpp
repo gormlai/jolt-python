@@ -29,7 +29,9 @@ int main(const int argc, const char **argv) {
   jolt_setLinearVelocity(sphereBody, sphereVelocity);
 
   jolt_start();
-  jolt_update();
+  while(jolt_isActive(sphereBody)) {
+    jolt_update();
+  }
   jolt_shutdown();
 
   return 0;

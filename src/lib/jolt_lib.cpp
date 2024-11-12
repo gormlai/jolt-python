@@ -265,6 +265,11 @@ void jolt_init() {
   printf("simple physics setup done\n");
 }
 
+bool jolt_isActive(uint64_t rigidBodyHandle) {
+  JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
+  JPH::Body * rigidBody = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle));
+  return bodyInterface.IsActive(rigidBody->GetID());
+}
 
 void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity) {
   JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
