@@ -22,8 +22,11 @@ int main(const int argc, const char **argv) {
   JPH::EMotionType sphereMotionType = JPH::EMotionType::Dynamic;
   JPH::ObjectLayer sphereLayer = 1;
   uint64_t sphereBody = jolt_createRigidBody(sphereShape, spherePos, sphereRotation, sphereMotionType, sphereLayer);
-  jolt_addRigidBody(sphereBody, true); // do not activate, as the floor does not move
+  jolt_addRigidBody(sphereBody, true); // activate
 
+  // start sphere moving
+  JPH::RVec3 sphereVelocity{0.0f, -5.0f, 0.0f};
+  jolt_setLinearVelocity(sphereBody, sphereVelocity);
 
   jolt_start();
   jolt_update();

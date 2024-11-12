@@ -26,6 +26,9 @@ extern "C" {
   uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer);
   uint64_t jolt_cCreateRigidBody(uint64_t shapeSettingsHandle, float position[], float rotation[], JPH::EMotionType motionType, JPH::ObjectLayer layer);
   void jolt_addRigidBody(uint64_t rigidBodyHandle, bool activate);
+  void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity);
+  void jolt_cSetLinearVelocity(uint64_t rigidBodyHandle, float velocity[]);
+
 }
 
 #endif

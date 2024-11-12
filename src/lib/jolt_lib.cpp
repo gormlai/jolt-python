@@ -213,6 +213,14 @@ void jolt_addRigidBody(uint64_t rigidBodyHandle, bool activate) {
   
 }
 
+uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ) {
+  JPH::BoxShapeSettings shapeSettings(JPH::Vec3(sizeX, sizeY, sizeZ));
+
+  JPH::ShapeSettings::ShapeResult creationResult = shapeSettings.Create();
+  JPH::ShapeRefC shapeRef = creationResult.Get();
+  uint64_t shapeRefHandle = g_shapeHandleManager.create(shapeRef);
+  return shapeRefHandle;
+}
 
 uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer) {
   uint64_t rigidBodyHandle = 0;
@@ -229,16 +237,6 @@ uint64_t jolt_cCreateRigidBody(uint64_t shapeSettingsHandle, float position[], f
    JPH::RVec3 pos{position[0], position[1], position[2]};
    JPH::Quat rot{rotation[0], rotation[1], rotation[2], rotation[3]};
    return jolt_createRigidBody(shapeSettingsHandle, pos, rot, motionType, layer);
-}
-
-
-uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ) {
-  JPH::BoxShapeSettings shapeSettings(JPH::Vec3(sizeX, sizeY, sizeZ));
-
-  JPH::ShapeSettings::ShapeResult creationResult = shapeSettings.Create();
-  JPH::ShapeRefC shapeRef = creationResult.Get();
-  uint64_t shapeRefHandle = g_shapeHandleManager.create(shapeRef);
-  return shapeRefHandle;
 }
 
 uint64_t jolt_createSphereShape(float radius) {
@@ -267,6 +265,15 @@ void jolt_init() {
   printf("simple physics setup done\n");
 }
 
+
+void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity) {
+
+}
+
+void jolt_cSetLinearVelocity(uint64_t rigidBodyHandle, float velocity[]) {
+
+}
+
 void jolt_shutdown() {
   delete tempAllocator;
   delete jobSystem;
@@ -287,4 +294,3 @@ void jolt_update() {
   physicsSystem.Update(cDeltaTime, cCollisionSteps, tempAllocator, jobSystem);
   
 }
-
