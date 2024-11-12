@@ -267,11 +267,14 @@ void jolt_init() {
 
 
 void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity) {
-
+  JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
+  JPH::Body * rigidBody = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle));
+  bodyInterface.SetLinearVelocity(rigidBody->GetID(), velocity);
 }
 
 void jolt_cSetLinearVelocity(uint64_t rigidBodyHandle, float velocity[]) {
-
+  JPH::RVec3 vVelocity{velocity[0], velocity[1], velocity[2]};
+  jolt_setLinearVelocity(rigidBodyHandle, vVelocity);
 }
 
 void jolt_shutdown() {
