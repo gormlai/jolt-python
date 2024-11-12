@@ -22,6 +22,7 @@ extern "C" {
   void jolt_start();
   void jolt_update();
   uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ);
+  uint64_t jolt_createSphereShape(float radius);
   uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer);
   uint64_t jolt_cCreateRigidBody(uint64_t shapeSettingsHandle, float position[], float rotation[], JPH::EMotionType motionType, JPH::ObjectLayer layer);
   void jolt_addRigidBody(uint64_t rigidBodyHandle, bool activate);

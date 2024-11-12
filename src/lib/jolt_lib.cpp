@@ -241,6 +241,16 @@ uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ) {
   return shapeRefHandle;
 }
 
+uint64_t jolt_createSphereShape(float radius) {
+  JPH::SphereShapeSettings shapeSettings(radius);
+
+  JPH::ShapeSettings::ShapeResult creationResult = shapeSettings.Create();
+  JPH::ShapeRefC shapeRef = creationResult.Get();
+  uint64_t shapeRefHandle = g_shapeHandleManager.create(shapeRef);
+  return shapeRefHandle;
+}
+
+
 void jolt_init() {
   JPH::RegisterDefaultAllocator();
   JPH::Trace = JPH::TraceImpl;
