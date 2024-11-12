@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include "jolt_lib.h"
 
 int main(const int argc, const char **argv) {
@@ -30,7 +31,11 @@ int main(const int argc, const char **argv) {
 
   jolt_start();
   while(jolt_isActive(sphereBody)) {
+    JPH::RVec3 position = jolt_getCenterOfMassPosition(sphereBody);
+	  JPH::Vec3 velocity = jolt_getLinearVelocity(sphereBody);
+	  std::cout << "Position = (" << position.GetX() << ", " << position.GetY() << ", " << position.GetZ() << "), Velocity = (" << velocity.GetX() << ", " << velocity.GetY() << ", " << velocity.GetZ() << ")" << std::endl;
     jolt_update();
+
   }
   jolt_shutdown();
 

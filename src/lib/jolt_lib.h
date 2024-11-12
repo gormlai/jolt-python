@@ -24,6 +24,8 @@ extern "C" {
   uint64_t jolt_createSphereShape(float radius);
   void jolt_init();
   bool jolt_isActive(uint64_t rigidBodyHandle);
+  JPH::RVec3 jolt_getCenterOfMassPosition(uint64_t rigidBodyHandle);
+  JPH::Vec3 jolt_getLinearVelocity(uint64_t rigidBodyHandle);
   void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity);
   void jolt_cSetLinearVelocity(uint64_t rigidBodyHandle, float velocity[]);
   void jolt_shutdown();
