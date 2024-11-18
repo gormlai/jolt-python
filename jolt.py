@@ -34,14 +34,18 @@ def init():
   exportedFunctions = CDLL(soFile)
   exportedFunctions.jolt_init()
 
+def isActive(shape):
+  global exportedFunctions
+  return exportedFunctions.jolt_isActive(shape)
+
 def setLinearVelocity(shape, velocity):
+  global exportedFunctions
   cVelocity = (c_float * len(velocity))(*velocity)
   return exportedFunctions.jolt_cSetLinearVelocity(shape, cVelocity)
 
 def start():
   global exportedFunctions
   exportedFunctions.jolt_start()
-
 
 def shutdown():
   global exportedFunctions
