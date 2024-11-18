@@ -28,6 +28,8 @@ if __name__ == "__main__":
   while jolt.isActive(sphereBody):
     spherePosition = jolt.getCenterOfMassPosition(sphereBody)
     sphereVelocity = jolt.getLinearVelocity(sphereBody)
+    print("Sphere position = (%s, %s, %s)" % (spherePosition[0], spherePosition[1], spherePosition[2]))
+    print("Sphere velocity = (%s, %s, %s)" % (sphereVelocity[0], sphereVelocity[1], sphereVelocity[2]))
     jolt.update()
     
 
