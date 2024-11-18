@@ -23,11 +23,11 @@ if __name__ == "__main__":
 
   sphereVelocity = [0.0, -5.0, 0.0]
   jolt.setLinearVelocity(sphereBody, sphereVelocity)
-
   jolt.start()
 
   while jolt.isActive(sphereBody):
-    
+    spherePosition = jolt.getCenterOfMassPosition(sphereBody)
+    sphereVelocity = jolt.getLinearVelocity(sphereBody)
     jolt.update()
     
 

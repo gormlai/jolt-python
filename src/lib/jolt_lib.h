@@ -25,7 +25,9 @@ extern "C" {
   void jolt_init();
   bool jolt_isActive(uint64_t rigidBodyHandle);
   JPH::RVec3 jolt_getCenterOfMassPosition(uint64_t rigidBodyHandle);
+  void jolt_cGetCenterOfMassPosition(uint64_t rigidBodyHandle, float position[3]);
   JPH::Vec3 jolt_getLinearVelocity(uint64_t rigidBodyHandle);
+  void jolt_cGetLinearVelocity(uint64_t rigidBodyHandle, float velocity[3]);
   void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity);
   void jolt_cSetLinearVelocity(uint64_t rigidBodyHandle, float velocity[]);
   void jolt_shutdown();

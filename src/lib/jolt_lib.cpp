@@ -277,10 +277,24 @@ JPH::RVec3 jolt_getCenterOfMassPosition(uint64_t rigidBodyHandle) {
   return bodyInterface.GetCenterOfMassPosition(rigidBody->GetID());
 }
 
+void jolt_cGetCenterOfMassPosition(uint64_t rigidBodyHandle, float position[3]) {
+  JPH::RVec3 vec = jolt_getCenterOfMassPosition(rigidBodyHandle);
+  position[0] = vec[0];
+  position[1] = vec[1];
+  position[2] = vec[2];
+}
+
 JPH::Vec3 jolt_getLinearVelocity(uint64_t rigidBodyHandle) {
   JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
   JPH::Body * rigidBody = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle));
   return bodyInterface.GetLinearVelocity(rigidBody->GetID());
+}
+
+void jolt_cGetLinearVelocity(uint64_t rigidBodyHandle, float velocity[3]) {
+  JPH::Vec3 vec = jolt_getLinearVelocity(rigidBodyHandle);
+  velocity[0] = vec[0];
+  velocity[1] = vec[1];
+  velocity[2] = vec[2];
 }
 
 void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity) {

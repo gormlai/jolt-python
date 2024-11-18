@@ -21,9 +21,24 @@ def createSphereShape(radius):
   return exportedFunctions.jolt_createSphereShape(r)
 
 def createRigidBody(shape, pos, rotation, motionType, layer):
+  global exportedFunctions
   cPos = (c_float * len(pos))(*pos)
   cRot = (c_float * len(rotation))(*rotation)
   return exportedFunctions.jolt_cCreateRigidBody(shape, cPos, cRot, motionType, layer)
+
+def getCenterOfMassPosition(shape):
+  global exportedFunctions
+  cPos = (c_float * 3)(0)
+  exportedFunctions.jolt_cGetCenterOfMassPosition(shape, cPos)
+  pos = [cPos[i] for i in range(3)]
+  return pos
+
+def getLinearVelocity(shape):
+  global exportedFunctions
+  cVelocity = (c_float * 3)(0)
+  exportedFunctions.jolt_cGetLinearVelocity(shape, cVelocity)
+  velocity = [cVelocity[i] for i in range(3)]
+  return velocity
 
 def init():
   global exportedFunctions
