@@ -5,12 +5,13 @@ if __name__ == "__main__":
 
   # add geometry here
   boxShape = jolt.createBoxShape(100, 1, 100)
-  pos = [0.0, -1.0, 0.0]
-  rot = [0.0, 0.0, 0.0, 1.0]
-  motionType = 0
-  layer = 0
-  floorBody = jolt.createRigidBody(boxShape, pos, rot, motionType, layer)
+  boxPos = [0.0, -1.0, 0.0]
+  boxRot = [0.0, 0.0, 0.0, 1.0]
+  boxMotionType = 0
+  boxLayer = 0
+  floorBody = jolt.createRigidBody(boxShape, boxPos, boxRot, boxMotionType, boxLayer)
   jolt.addRigidBody(floorBody, False)
+  
 
   jolt.start()
   jolt.update()
