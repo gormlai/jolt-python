@@ -33,8 +33,6 @@ JPH_SUPPRESS_WARNINGS
 
 namespace {
     const std::string appName = "Physics Viewer";
-    constexpr unsigned int windowWidth = 1200;
-    constexpr unsigned int WindowHeight = 800;
 }
 
 namespace Layers
