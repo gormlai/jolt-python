@@ -23,7 +23,16 @@ def createSphereShape(radius):
 def createConvexHullShape(vertices):
   global exportedFunctions
   numVertices = len(vertices)
-  cVertices = (c_float * len(vertices))(0)  
+  if numVertices == 0 :
+    return 0
+  
+  numVertexValuesFromPython = len(vertices[0])
+  # we multiply by 4 here, as the num vertices are assumed to be a Vec3 
+  cVertices = (c_float * (numVertices * 4))(0)
+  for vertex in range(numVertices):
+    for vIndex in range(numVertexValuesFromPython):
+      cVertices[vertex*4 + vIndex] = vertices[vertex][vIndex]
+
   return exportedFunctions.jolt_createConvexHullShape(cVertices, numVertices)
 
 def createRigidBody(shape, pos, rotation, motionType, layer):
