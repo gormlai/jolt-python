@@ -15,6 +15,7 @@
 #include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
+#include <Jolt/Physics/Collision/Shape/ConvexHullShape.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
 
@@ -221,6 +222,15 @@ uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ) {
   uint64_t shapeRefHandle = g_shapeHandleManager.create(shapeRef);
   return shapeRefHandle;
 }
+
+uint64_t jolt_createConvexHullShape(const JPH::Vec3 * vertices, const int numVertices) {
+  JPH::ConvexHullShapeSettings shapeSettings(vertices, numVertices);
+  JPH::ShapeSettings::ShapeResult creationResult = shapeSettings.Create();
+  JPH::ShapeRefC shapeRef = creationResult.Get();
+  uint64_t shapeRefHandle = g_shapeHandleManager.create(shapeRef);
+  return shapeRefHandle;
+}
+
 
 uint64_t jolt_createRigidBody(uint64_t shapeSettingsHandle, JPH::RVec3 position, JPH::Quat rotation, JPH::EMotionType motionType, JPH::ObjectLayer layer) {
   uint64_t rigidBodyHandle = 0;
