@@ -20,6 +20,12 @@ def createSphereShape(radius):
   r = c_float(radius)
   return exportedFunctions.jolt_createSphereShape(r)
 
+def createConvexHullShape(vertices):
+  global exportedFunctions
+  numVertices = len(vertices)
+  cVertices = (c_float * len(vertices))(0)  
+  return exportedFunctions.jolt_createConvexHullShape(cVertices, numVertices)
+
 def createRigidBody(shape, pos, rotation, motionType, layer):
   global exportedFunctions
   cPos = (c_float * len(pos))(*pos)
