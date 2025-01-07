@@ -51,6 +51,10 @@ def createRigidBody(shape, pos, rotation, motionType, layer):
   cRot = (c_float * len(rotation))(*rotation)
   return exportedFunctions.jolt_cCreateRigidBody(shape, cPos, cRot, motionType, layer)
 
+def destroyShape(shape):
+  global exportedFunctions
+  exportedFunctions.jolt_destroyShape(shape)
+
 def getCenterOfMassPosition(shape):
   global exportedFunctions
   cPos = (c_float * 3)(0)
