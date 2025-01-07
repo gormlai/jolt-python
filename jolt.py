@@ -21,18 +21,27 @@ def createSphereShape(radius):
   r = c_float(radius)
   return exportedFunctions.jolt_createSphereShape(r)
 
-def createConvexHullShape(vertices):
+def createConvexHullShape(vertices, indices = None):
   global exportedFunctions
   numVertices = len(vertices)
   if numVertices == 0 :
     return 0
   
+  cVertices = None
   numVertexValuesFromPython = len(vertices[0])
-  # we multiply by 4 here, as the num vertices are assumed to be a Vec3 
-  cVertices = (c_float * (numVertices * 4))(0)
-  for vertex in range(numVertices):
-    for vIndex in range(numVertexValuesFromPython):
-      cVertices[vertex*4 + vIndex] = vertices[vertex][vIndex]
+  if indices is None:
+    # we multiply by 4 here, as the num vertices are assumed to be a Vec3 
+    cVertices = (c_float * (numVertices * 4))(0)
+    for vertex in range(numVertices):
+      for vIndex in range(numVertexValuesFromPython):
+        cVertices[vertex*4 + vIndex] = vertices[vertex][vIndex]
+  else:
+    numIndices = len(indices)
+    cVertices = (c_float * (numIndices * 4))(0)
+    for index in range(numIndices):
+      vertexIndex = indices[index]
+      for vIndex in range(numVertexValuesFromPython):
+        cVertices[vertex*4 + vIndex] = vertices[vertexIndex][vIndex]      
 
   return exportedFunctions.jolt_createConvexHullShape(cVertices, numVertices)
 
