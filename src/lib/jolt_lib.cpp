@@ -305,6 +305,30 @@ void jolt_cGetLinearVelocity(uint64_t rigidBodyHandle, float velocity[3]) {
   velocity[2] = vec[2];
 }
 
+void jolt_removeRigidBody(uint64_t rigidBodyHandle) {
+  JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
+  JPH::Body * rigidBody = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle));
+  if(rigidBody != nullptr) {
+    const bool bodyRemoved = g_handleManager.remove(rigidBodyHandle);
+    if(bodyRemoved) {
+      bodyInterface.RemoveBody(rigidBody->GetID());
+    }
+  }
+}
+
+void jolt_removeAndDestroyRigidBody(uint64_t rigidBodyHandle) {
+  JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
+  JPH::Body * rigidBody = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle));
+  if(rigidBody != nullptr) {
+    const bool bodyRemoved = g_handleManager.remove(rigidBodyHandle);
+    if(bodyRemoved) {
+      bodyInterface.RemoveBody(rigidBody->GetID());
+      bodyInterface.DestroyBody(rigidBody->GetID());
+    }
+  }
+
+}
+
 void jolt_setLinearVelocity(uint64_t rigidBodyHandle, JPH::RVec3 velocity) {
   JPH::BodyInterface &bodyInterface = physicsSystem.GetBodyInterface();
   JPH::Body * rigidBody = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle));
