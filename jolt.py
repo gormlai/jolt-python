@@ -102,4 +102,3 @@ def shutdown():
 def update():
   global exportedFunctions
   exportedFunctions.jolt_update()
-
