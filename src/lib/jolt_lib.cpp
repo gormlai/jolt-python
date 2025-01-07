@@ -256,6 +256,13 @@ uint64_t jolt_createSphereShape(float radius) {
   return shapeRefHandle;
 }
 
+void jolt_destroyShape(uint64_t shapeHandle) {
+  JPH::ShapeRefC shapeRef = g_shapeHandleManager.lookup(shapeHandle);
+  if(shapeRef) {
+    g_shapeHandleManager.remove(shapeHandle);
+  }
+}
+
 
 void jolt_init() {
   JPH::RegisterDefaultAllocator();
