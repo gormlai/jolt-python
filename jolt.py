@@ -6,6 +6,7 @@ import struct
 exportedFunctions = None
 
 def addRigidBody(rigidBodyHandle, activate):
+  global exportedFunctions
   return exportedFunctions.jolt_addRigidBody(rigidBodyHandle, activate)
 
 def createBoxShape(xSize, ySize, zSize):
