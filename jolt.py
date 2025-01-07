@@ -78,6 +78,14 @@ def isActive(shape):
   global exportedFunctions
   return exportedFunctions.jolt_isActive(shape)
 
+def removeAndDestroyRigidBody(rigidBodyHandle):
+  global exportedFunctions
+  return exportedFunctions.jolt_removeAndDestroyRigidBody(rigidBodyHandle)
+
+def removeRigidBody(rigidBodyHandle):
+  global exportedFunctions
+  return exportedFunctions.jolt_removeRigidBody(rigidBodyHandle)
+
 def setLinearVelocity(shape, velocity):
   global exportedFunctions
   cVelocity = (c_float * len(velocity))(*velocity)
