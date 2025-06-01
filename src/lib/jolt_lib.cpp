@@ -13,11 +13,16 @@
 #include <Jolt/Core/JobSystemThreadPool.h>
 #include <Jolt/Physics/PhysicsSettings.h>
 #include <Jolt/Physics/PhysicsSystem.h>
+#include <Jolt/Physics/Body/BodyInterface.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
 #include <Jolt/Physics/Collision/Shape/ConvexHullShape.h>
+#include <Jolt/Physics/Collision/Shape/Shape.h>
+#include <Jolt/Physics/Collision/NarrowPhaseQuery.h>
+#include <Jolt/Physics/Collision/CollideShape.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
+#include <Jolt/Physics/Collision/CollisionDispatch.h>
 
 #include "HandleManager.h"
 
@@ -211,6 +216,33 @@ void jolt_addRigidBody(uint64_t rigidBodyHandle, bool activate) {
   bodyInterface.AddBody(rigidBody->GetID(), startsActive);
   
 }
+
+bool jolt_checkBodiesOverlap(uint64_t rigidBodyHandle0, uint64_t rigidBodyHandle1) {  
+  JPH::Body * rigidBody0 = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle0));
+  JPH::Body * rigidBody1 = reinterpret_cast<JPH::Body*>(g_handleManager.lookup(rigidBodyHandle1));
+
+  if(rigidBody0==nullptr || rigidBody1==nullptr) {
+    return false; // everything is true about the empty set
+  }
+
+  const JPH::NarrowPhaseQuery & narrowPhaseQuery = physicsSystem.GetNarrowPhaseQuery();
+  //  narrowPhaseQuery.CollideShape()
+
+  const JPH::Shape * shape0 = rigidBody0->GetShape();
+  const JPH::RMat44 trans0 = rigidBody0->GetWorldTransform();
+  const JPH::Shape * shape1 = rigidBody1->GetShape();
+  const JPH::RMat44 trans1 = rigidBody1->GetWorldTransform();
+
+  const JPH::Vec3Arg scale{1.0f, 1.0f, 1.0f};
+  const JPH::CollideShapeSettings collideSettings{};
+  JPH::CollideShapeResult result;
+
+//  narrowPhaseQuery.CollideShape(shape, scale, centerOfMass, collideSettings, offset);
+//  query.Are
+  return true; 
+
+}
+
 
 uint64_t jolt_createBoxShape(float sizeX, float sizeY, float sizeZ) {
   JPH::BoxShapeSettings shapeSettings(JPH::Vec3(sizeX, sizeY, sizeZ));
